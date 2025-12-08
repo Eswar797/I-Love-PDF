@@ -1,47 +1,44 @@
-# Railway Deployment Guide
+# Render Deployment Guide
 
-## Backend Deployment to Railway
+## Backend Deployment to Render
 
 ### Step 1: Prepare Your Code
 1. Make sure your code is pushed to GitHub
 2. All dependencies are in `package.json`
 
-### Step 2: Deploy to Railway
-1. Go to [railway.app](https://railway.app)
+### Step 2: Deploy to Render
+1. Go to [render.com](https://render.com)
 2. Sign up/Login with GitHub
-3. Click **"New Project"**
-4. Select **"Deploy from GitHub repo"**
-5. Choose your repository
+3. Click **"New +"** → **"Blueprint"** (or **"Web Service"**)
+4. Connect your GitHub repository: `Eswar797/I-Love-PDF`
+5. Render will auto-detect `render.yaml` configuration
 
 ### Step 3: Configure Backend Service
-1. Railway will auto-detect Node.js
-2. Click on the service → **Settings**
-3. Set **Root Directory**: `server`
-4. Set **Start Command**: `npm start` (or leave default)
-5. Go to **Variables** tab
-6. Add environment variables:
+If using Blueprint, Render will auto-configure from `render.yaml`.
+If creating manually:
+1. Set **Root Directory**: `server`
+2. Set **Build Command**: `npm install`
+3. Set **Start Command**: `npm start`
+4. Add environment variables:
    - `NODE_ENV` = `production`
-   - `PORT` = `3001` (Railway will auto-assign, but set this for consistency)
+   - `PORT` = `3001`
 
 ### Step 4: Get Your Backend URL
-1. After deployment, Railway will provide a URL like: `https://your-app.railway.app`
+1. After deployment, Render will provide a URL like: `https://pdf-backend.onrender.com`
 2. Copy this URL - you'll need it for the frontend
+3. **Note:** Free tier services spin down after 15 minutes of inactivity
 
-### Step 5: Deploy Frontend (Optional - Railway Static)
-You can deploy frontend separately or serve it from backend:
-
-**Option A: Deploy Frontend as Separate Service**
-1. Add new service in Railway
-2. Root Directory: `client`
-3. Build Command: `npm install && npm run build`
-4. Output Directory: `dist`
-5. Add env: `VITE_API_URL=https://your-backend.railway.app`
-
-**Option B: Serve Frontend from Backend (Recommended)**
-- The backend is already configured to serve the frontend in production
-- Just build the frontend and Railway will serve it:
-  1. In Railway, add a build step: `cd client && npm install && npm run build`
-  2. The backend will serve files from `client/dist`
+### Step 5: Deploy Frontend to Render (Static Site)
+1. In Render dashboard, click **"New +"** → **"Static Site"**
+2. Connect your GitHub repository: `Eswar797/I-Love-PDF`
+3. Configure:
+   - **Root Directory:** `client`
+   - **Build Command:** `npm install && npm run build`
+   - **Publish Directory:** `dist`
+4. Add Environment Variable:
+   - **Key:** `VITE_API_URL`
+   - **Value:** `https://pdf-backend.onrender.com` (your backend URL)
+5. Click **"Create Static Site"**
 
 ## Environment Variables
 
@@ -50,8 +47,8 @@ You can deploy frontend separately or serve it from backend:
 - `PORT` = Railway auto-assigns (default: 3001)
 - `FRONTEND_URL` = Your frontend URL (if deploying separately)
 
-### Frontend (if separate):
-- `VITE_API_URL` = Your Railway backend URL
+### Frontend:
+- `VITE_API_URL` = Your Render backend URL (e.g., `https://pdf-backend.onrender.com`)
 
 ## Quick Deploy Checklist
 
@@ -85,9 +82,10 @@ You can deploy frontend separately or serve it from backend:
 - Verify `uploads` directory is writable
 - Check Railway logs for errors
 
-## Railway Tips
+## Render Tips
 
-- Railway auto-detects Node.js projects
-- You can use Railway's built-in PostgreSQL if needed
-- Railway provides free tier with generous limits
-- Check Railway dashboard for logs and metrics
+- Use Blueprint deployment for automatic configuration from `render.yaml`
+- Free tier backend services spin down after 15 minutes (first request may be slow)
+- Static sites are always available (no spin-down)
+- Check Render dashboard for logs and metrics
+- Consider upgrading to paid plan for always-on backend in production

@@ -28,6 +28,10 @@ RUN mkdir -p uploads
 # Expose port
 EXPOSE 3001
 
+# Set environment
+ENV NODE_ENV=production
+ENV PORT=3001
+
 # Start server
 CMD ["node", "index.js"]
 

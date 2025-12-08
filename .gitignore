@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Build outputs
+dist/
+client/dist/
+build/
+
+# Environment variables
+.env
+.env.local
+.env.production
+.env.development
+
+# Uploads directory
+uploads/
+*.pdf
+*.jpg
+*.jpeg
+*.png
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+
+# Deployment
+.vercel
+.netlify

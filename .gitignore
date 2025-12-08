@@ -11,8 +11,9 @@ build/
 # Environment variables
 .env
 .env.local
-.env.production
 .env.development
+# Keep .env.production.example for reference
+!.env.production.example
 
 # Uploads directory
 uploads/

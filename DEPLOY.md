@@ -24,9 +24,10 @@ If creating manually:
    - `PORT` = `3001`
 
 ### Step 4: Get Your Backend URL
-1. After deployment, Render will provide a URL like: `https://pdf-backend.onrender.com`
+1. After deployment, Render will provide a URL like: `https://pdf-backend-3c5m.onrender.com`
 2. Copy this URL - you'll need it for the frontend
-3. **Note:** Free tier services spin down after 15 minutes of inactivity
+3. **Your Backend URL:** `https://pdf-backend-3c5m.onrender.com`
+4. **Note:** Free tier services spin down after 15 minutes of inactivity
 
 ### Step 5: Deploy Frontend to Render (Static Site)
 1. In Render dashboard, click **"New +"** → **"Static Site"**
@@ -37,7 +38,7 @@ If creating manually:
    - **Publish Directory:** `dist`
 4. Add Environment Variable:
    - **Key:** `VITE_API_URL`
-   - **Value:** `https://pdf-backend.onrender.com` (your backend URL)
+   - **Value:** `https://pdf-backend-3c5m.onrender.com`
 5. Click **"Create Static Site"**
 
 ## Environment Variables
@@ -48,7 +49,7 @@ If creating manually:
 - `FRONTEND_URL` = Your frontend URL (if deploying separately)
 
 ### Frontend:
-- `VITE_API_URL` = Your Render backend URL (e.g., `https://pdf-backend.onrender.com`)
+- `VITE_API_URL` = `https://pdf-backend-3c5m.onrender.com`
 
 ## Quick Deploy Checklist
 

@@ -1,7 +1,7 @@
 # Frontend Deployment Guide
 
 ## Your Backend URL
-**Backend API:** https://i-love-pdf-production-1719.up.railway.app
+**Backend API:** https://pdf-backend-3c5m.onrender.com
 
 ## Option 1: Deploy to Vercel (Recommended)
 
@@ -48,7 +48,7 @@ Vercel will automatically deploy and give you a URL like:
    - **Publish directory:** `dist`
 6. Add Environment Variable:
    - **Key:** `VITE_API_URL`
-   - **Value:** `https://i-love-pdf-production-1719.up.railway.app`
+   - **Value:** `https://pdf-backend-3c5m.onrender.com`
    - **Note:** The `/api` path will be automatically appended
 7. Click **"Deploy site"**
 
@@ -70,7 +70,7 @@ Netlify will deploy and give you a URL like:
 3. Set **Start Command:** `npm run preview` (or use a static file server)
 4. Add Environment Variable:
    - **Key:** `VITE_API_URL`
-   - **Value:** `https://i-love-pdf-production-1719.up.railway.app`
+   - **Value:** `https://pdf-backend-3c5m.onrender.com`
 
 ### Step 3: Deploy
 Railway will build and deploy your frontend
@@ -102,7 +102,7 @@ Make sure to set this in your deployment platform:
 
 ### API Connection Failed
 - Verify `VITE_API_URL` is set correctly
-- Check backend is running: https://i-love-pdf-production-1719.up.railway.app/api/health
+- Check backend is running: https://pdf-backend-3c5m.onrender.com/api/health
 - Check browser console for errors
 
 ### Build Errors
@@ -117,7 +117,7 @@ Make sure to set this in your deployment platform:
 ```bash
 cd client
 npm install
-VITE_API_URL=https://i-love-pdf-production-1719.up.railway.app npm run build
+VITE_API_URL=https://pdf-backend-3c5m.onrender.com npm run build
 npm run preview
 ```
 

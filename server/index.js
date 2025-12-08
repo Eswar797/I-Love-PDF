@@ -20,12 +20,20 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.static('uploads'));
 
-// Serve frontend in production
+// Serve frontend in production (only if dist folder exists)
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../client/dist')));
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
-  });
+  const frontendPath = path.join(__dirname, '../client/dist');
+  if (fs.existsSync(frontendPath)) {
+    app.use(express.static(frontendPath));
+    app.get('*', (req, res) => {
+      const indexPath = path.join(frontendPath, 'index.html');
+      if (fs.existsSync(indexPath)) {
+        res.sendFile(indexPath);
+      } else {
+        res.json({ message: 'PDF API is running. Frontend not built.' });
+      }
+    });
+  }
 }
 
 // Serve frontend in production

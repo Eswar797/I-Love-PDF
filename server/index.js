@@ -464,7 +464,30 @@ app.get('/api/download/:filename', (req, res) => {
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'PDF API is running' });
+  res.json({ 
+    status: 'ok', 
+    message: 'PDF API is running',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'PDF API Server',
+    status: 'running',
+    endpoints: {
+      health: '/api/health',
+      merge: '/api/merge',
+      split: '/api/split',
+      compress: '/api/compress',
+      rotate: '/api/rotate',
+      extract: '/api/extract',
+      watermark: '/api/watermark',
+      protect: '/api/protect',
+      imagesToPdf: '/api/images-to-pdf'
+    }
+  });
 });
 
 const HOST = process.env.NODE_ENV === 'production' ? '0.0.0.0' : '127.0.0.1';
@@ -477,6 +500,15 @@ server.maxConnections = 50; // Reduced to prevent overload
 server.timeout = 300000; // 5 minutes
 server.keepAliveTimeout = 65000; // 65 seconds
 server.headersTimeout = 66000; // 66 seconds
+
+// Handle server errors gracefully
+server.on('error', (error) => {
+  if (error.code === 'EADDRINUSE') {
+    console.error(`Port ${PORT} is already in use`);
+  } else {
+    console.error('Server error:', error);
+  }
+});
 
 // Handle connection errors
 server.on('connection', (socket) => {

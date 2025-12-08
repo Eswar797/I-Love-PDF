@@ -49,6 +49,7 @@ Vercel will automatically deploy and give you a URL like:
 6. Add Environment Variable:
    - **Key:** `VITE_API_URL`
    - **Value:** `https://i-love-pdf-production-1719.up.railway.app`
+   - **Note:** The `/api` path will be automatically appended
 7. Click **"Deploy site"**
 
 ### Step 3: Done!

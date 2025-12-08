@@ -36,14 +36,6 @@ if (process.env.NODE_ENV === 'production') {
   }
 }
 
-// Serve frontend in production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../client/dist')));
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
-  });
-}
-
 // Increase server timeout for large file uploads
 app.timeout = 300000; // 5 minutes
 

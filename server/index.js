@@ -3,7 +3,7 @@ const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const { PDFDocument, degrees } = require('pdf-lib');
+const { PDFDocument, degrees, rgb, StandardFonts } = require('pdf-lib');
 const pdfParse = require('pdf-parse');
 
 const app = express();
@@ -303,16 +303,30 @@ app.post('/api/watermark', upload.single('file'), async (req, res) => {
     const pdf = await PDFDocument.load(pdfBytes);
     const pageCount = pdf.getPageCount();
 
+    // Embed a font for the watermark
+    const helveticaFont = await pdf.embedFont(StandardFonts.Helvetica);
+    const fontSize = 50;
+
     for (let i = 0; i < pageCount; i++) {
       const page = pdf.getPage(i);
       const { width, height } = page.getSize();
       
+      // Calculate text dimensions for proper centering
+      const textWidth = helveticaFont.widthOfTextAtSize(text, fontSize);
+      const textHeight = helveticaFont.heightAtSize(fontSize);
+      
+      // Center the watermark on the page
+      const x = (width - textWidth) / 2;
+      const y = (height - textHeight) / 2;
+      
       page.drawText(text, {
-        x: width / 2 - 50,
-        y: height / 2,
-        size: 50,
+        x: x,
+        y: y,
+        size: fontSize,
+        font: helveticaFont,
+        color: rgb(0.5, 0.5, 0.5), // Gray color
+        rotate: degrees(-45), // Rotate 45 degrees counterclockwise
         opacity: 0.3,
-        rotate: { angleInDegrees: 45 },
       });
     }
 
@@ -328,6 +342,7 @@ app.post('/api/watermark', upload.single('file'), async (req, res) => {
       message: 'Watermark added successfully'
     });
   } catch (error) {
+    console.error('Watermark error:', error);
     res.status(500).json({ error: error.message });
   }
 });

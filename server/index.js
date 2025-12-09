@@ -182,9 +182,33 @@ app.post('/api/rotate', upload.single('file'), async (req, res) => {
     const pdf = await PDFDocument.load(pdfBytes);
     const pageCount = pdf.getPageCount();
 
+    // Normalize angle to valid PDF rotation values (0, 90, 180, 270)
+    let rotationAngle = angle;
+    if (rotationAngle < 0) {
+      rotationAngle = ((rotationAngle % 360) + 360) % 360;
+    } else {
+      rotationAngle = rotationAngle % 360;
+    }
+    
+    // Round to nearest valid angle
+    const validAngles = [0, 90, 180, 270];
+    const targetAngle = validAngles.reduce((prev, curr) => 
+      Math.abs(curr - rotationAngle) < Math.abs(prev - rotationAngle) ? curr : prev
+    );
+
     for (let i = 0; i < pageCount; i++) {
       const page = pdf.getPage(i);
-      page.setRotation(page.getRotation() + angle);
+      // getRotation() returns degrees as a number (0, 90, 180, or 270)
+      const currentRotation = page.getRotation();
+      // Calculate new rotation: add target angle to current rotation
+      const newRotation = (currentRotation + targetAngle) % 360;
+      // Ensure it's a valid PDF rotation value
+      const validRotations = [0, 90, 180, 270];
+      const finalRotation = validRotations.includes(newRotation) ? newRotation : 
+                          validRotations.reduce((prev, curr) => 
+                            Math.abs(curr - newRotation) < Math.abs(prev - newRotation) ? curr : prev
+                          );
+      page.setRotation(finalRotation);
     }
 
     const rotatedBytes = await pdf.save();
@@ -196,9 +220,10 @@ app.post('/api/rotate', upload.single('file'), async (req, res) => {
     res.json({ 
       success: true, 
       file: path.basename(outputPath),
-      message: `PDF rotated ${angle} degrees`
+      message: `PDF rotated ${targetAngle} degrees`
     });
   } catch (error) {
+    console.error('Rotate PDF error:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -300,35 +325,6 @@ app.post('/api/watermark', upload.single('file'), async (req, res) => {
       success: true, 
       file: path.basename(outputPath),
       message: 'Watermark added successfully'
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Protect PDF with password
-app.post('/api/protect', upload.single('file'), async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'PDF file required' });
-    }
-
-    const password = req.body.password || 'default123';
-    const pdfBytes = fs.readFileSync(req.file.path);
-    const pdf = await PDFDocument.load(pdfBytes);
-    
-    // Note: pdf-lib doesn't support password protection directly
-    // This is a placeholder - in production, use a library like pdfkit or pdfmake
-    const protectedBytes = await pdf.save();
-    const outputPath = `uploads/protected-${Date.now()}.pdf`;
-    fs.writeFileSync(outputPath, protectedBytes);
-
-    fs.unlinkSync(req.file.path);
-
-    res.json({ 
-      success: true, 
-      file: path.basename(outputPath),
-      message: 'PDF protection applied (Note: Full encryption requires additional libraries)'
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -484,7 +480,6 @@ app.get('/', (req, res) => {
       rotate: '/api/rotate',
       extract: '/api/extract',
       watermark: '/api/watermark',
-      protect: '/api/protect',
       imagesToPdf: '/api/images-to-pdf'
     }
   });

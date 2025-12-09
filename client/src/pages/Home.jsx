@@ -6,7 +6,6 @@ import {
   RotateCw, 
   FileX, 
   Droplet, 
-  Lock, 
   Image as ImageIcon 
 } from 'lucide-react'
 
@@ -52,13 +51,6 @@ const tools = [
     description: 'Add watermark to PDF',
     path: '/watermark',
     color: 'bg-teal-500'
-  },
-  { 
-    icon: Lock, 
-    title: 'Protect PDF', 
-    description: 'Add password protection',
-    path: '/protect',
-    color: 'bg-indigo-500'
   },
   { 
     icon: ImageIcon, 

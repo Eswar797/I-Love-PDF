@@ -11,7 +11,6 @@ export default function Layout({ children }) {
     { path: '/rotate', label: 'Rotate PDF' },
     { path: '/extract', label: 'Extract Pages' },
     { path: '/watermark', label: 'Watermark' },
-    { path: '/protect', label: 'Protect PDF' },
     { path: '/images-to-pdf', label: 'Images to PDF' },
   ]
 

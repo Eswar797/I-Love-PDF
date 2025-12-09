@@ -3,7 +3,7 @@ const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const { PDFDocument } = require('pdf-lib');
+const { PDFDocument, degrees } = require('pdf-lib');
 const pdfParse = require('pdf-parse');
 
 const app = express();
@@ -198,17 +198,18 @@ app.post('/api/rotate', upload.single('file'), async (req, res) => {
 
     for (let i = 0; i < pageCount; i++) {
       const page = pdf.getPage(i);
-      // getRotation() returns degrees as a number (0, 90, 180, or 270)
-      const currentRotation = page.getRotation();
+      // getRotation() returns a rotation object with .angle property
+      const currentRotation = page.getRotation().angle;
       // Calculate new rotation: add target angle to current rotation
       const newRotation = (currentRotation + targetAngle) % 360;
-      // Ensure it's a valid PDF rotation value
+      // Ensure it's a valid PDF rotation value (0, 90, 180, or 270)
       const validRotations = [0, 90, 180, 270];
       const finalRotation = validRotations.includes(newRotation) ? newRotation : 
                           validRotations.reduce((prev, curr) => 
                             Math.abs(curr - newRotation) < Math.abs(prev - newRotation) ? curr : prev
                           );
-      page.setRotation(finalRotation);
+      // setRotation() requires degrees() helper function
+      page.setRotation(degrees(finalRotation));
     }
 
     const rotatedBytes = await pdf.save();

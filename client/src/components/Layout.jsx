@@ -45,8 +45,13 @@ export default function Layout({ children }) {
         {children}
       </main>
       <footer className="bg-white border-t mt-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-gray-600">
-          <p>© 2024 I Love PDF Clone. All rights reserved.</p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
+          <p className="text-gray-600 mb-2">
+            © 2024 I Love PDF Clone. All rights reserved.
+          </p>
+          <p className="text-sm text-gray-500">
+            Made with ❤️ by <span className="font-semibold text-gray-700">Eswar Narayana</span>
+          </p>
         </div>
       </footer>
     </div>
